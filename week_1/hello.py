@@ -44,3 +44,4 @@ for i in range(2, 10, 2):
 
 print(s)
 print()
+print(bool(0.000001))

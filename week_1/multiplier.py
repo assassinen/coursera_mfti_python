@@ -22,7 +22,7 @@ def nonBlockingInput(prompt='', timeout=2):
     except AlarmException:
         print('\nДолго нет ответа. Попробуйте учить, а не считать.')
     signal.signal(signal.SIGALRM, signal.SIG_IGN)
-    return 'Time out'
+
 
 
 start = int(sys.argv[1])
@@ -53,13 +53,14 @@ while n > 0:
 
     z = nonBlockingInput(timeout = timeout)
 
-    if z == 'Time out':
+    if z is None :
         rez[2] = rez[2] + 1
         continue
     elif z.isdigit():
         z = int(z)
     else:
         print("Ответ не является числом.")
+        input_list.pop()
         n += 1
         continue
     f.write(input_str + str(z) + '\n')

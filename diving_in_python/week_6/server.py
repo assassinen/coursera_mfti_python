@@ -2,9 +2,10 @@ import asyncio
 
 
 class ClientServerProtocol(asyncio.Protocol):
+    metrics = {}
 
     def __init__(self):
-        self.metrics = {}
+        # self.metrics = {}
         self.spliter = '_#_'
         self.ok_message = 'ok\n'
         self.error_message = 'error\nwrong command\n\n'

@@ -145,4 +145,6 @@ def get_car_list(csv_filename):
 
 
 if __name__ == "__main__":
+    # print(get_car_list(sys.argv[1]))
     get_car_list(sys.argv[1])
+    print(object.__dict__)

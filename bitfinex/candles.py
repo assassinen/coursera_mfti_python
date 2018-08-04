@@ -44,6 +44,7 @@ def get_last_price(symbols=('tBTCUSD','tETHUSD',)):
     result = ({key:item for key, item in tiker.items() if key in key_list} for tiker in get_tikers(symbols))
     return result
 
+
 while True:
     for coin_params in get_last_price():
         print("{}: {}".format(coin_params['SYMBOL'][1:], coin_params['LAST_PRICE']))

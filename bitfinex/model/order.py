@@ -31,5 +31,5 @@ class Order:
                                    self.status)
 
     def __repr__(self):
-        return 'price: {}'.format(self.price)
+        return 'status: {}, price: {}, dir: {} '.format(self.status, self.price, self.dir)
 

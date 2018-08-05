@@ -19,16 +19,16 @@ class Order:
         self.status = status
 
 
-    def __repr__(self):
-        return 'order: {}, ' \
-               'price: {}, ' \
-               'size: {}, ' \
-               'dir: {}, ' \
-               'status: {}'.format(self.id,
-                                   self.price,
-                                   self.size,
-                                   self.dir,
-                                   self.status)
+    # def __repr__(self):
+    #     return 'order: {}, ' \
+    #            'price: {}, ' \
+    #            'size: {}, ' \
+    #            'dir: {}, ' \
+    #            'status: {}'.format(self.id,
+    #                                self.price,
+    #                                self.size,
+    #                                self.dir,
+    #                                self.status)
 
     def __repr__(self):
         return 'status: {}, price: {}, dir: {} '.format(self.status, self.price, self.dir)

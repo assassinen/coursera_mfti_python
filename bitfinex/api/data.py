@@ -11,6 +11,7 @@ class Ticker:
         self.url = config['ticker']['url']
         self.key = config['ticker']['responce_key'].split(',\n')
 
+
     def get_tiker(self, symbol='tBTCUSD'):
         result = []
         try:
@@ -39,6 +40,7 @@ class Candles:
         config.read_file(open('config.ini'))
         self.url = config['candles']['url']
         self.key = config['candles']['responce_key'].split(',\n')
+        self.limit = 1000
 
 
     def time_to_unix_time(self, human_time):
@@ -54,30 +56,33 @@ class Candles:
         return int(time_frame[0:-1]) * multiplier[time_frame[-1]]
 
 
-    def get_candle(self, time_frame, start, end):
-        request = self.url.format(time_frame=time_frame, symbol='tBTCUSD', start=start*1000, end=end*1000)
+    def get_candle(self, symbol, limit, time_frame, start, end):
+        request = self.url.format(limit=limit, time_frame=time_frame, symbol=symbol, start=start*1000, end=end*1000)
         try:
             response = requests.get(request)
             if response.status_code == 200:
                 result = [dict(zip(self.key, item)) for item in response.json()]
-                return result[0] if len(result) > 0 else 'no fing data'
+                return result if len(result) > 0 else ['no fing data']
             elif 'error' in response.json():
                 return False
         except:
             return False
 
 
-    def get_candles(self, time_frame='1m', start='2018-08-04 12:10:00', end='2018-08-04 12:14:00'):
-        duration = self.get_duration_candle(time_frame)
+    def get_candles(self, symbol, time_frame, start, end):
+        duration = self.get_duration_candle(time_frame) * self.limit
         start = self.time_to_unix_time(start)
         end = self.time_to_unix_time(end)
 
         while start <= end:
-            candle = self.get_candle(time_frame=time_frame, start=start, end=start + duration - 1)
-            while not candle:
-                candle = self.get_candle(time_frame=time_frame, start=start, end=start + duration - 1)
+            calc_end = start + duration - 1
+            calc_end = end + 1 if end <= calc_end else calc_end
+            candles = self.get_candle(symbol=symbol, limit=self.limit, time_frame=time_frame, start=start, end=calc_end)
+            while not candles:
+                candles = self.get_candle(symbol=symbol, limit=self.limit, time_frame=time_frame, start=start, end=calc_end)
                 time.sleep(2)
-            yield candle
+            for candle in candles:
+                yield candle
             start += duration
 
 

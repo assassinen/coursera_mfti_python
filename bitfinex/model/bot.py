@@ -12,7 +12,8 @@ class Bot:
         self.depth = depth
         self.order_size = order_size
         self.price = Ticker()
-        self.marge = 0
+        self.margin = 0
+        self.max_depth = 0
 
         self.orders = {}
         self.orders[OrderDir.sell] = []
@@ -54,11 +55,11 @@ class Bot:
     def margin_calculate(self):
         last_sell_order = self.get_last_order(OrderDir.sell)
         last_buy_order = self.get_last_order(OrderDir.buy)
-        self.marge = self.marge + \
-                     last_sell_order.price * self.order_size - \
-                     last_buy_order.price * self.order_size - \
-                     last_sell_order.price * self.order_size * 0.001 - \
-                     last_buy_order.price * self.order_size * 0.001
+        self.margin = self.margin + \
+                      last_sell_order.price * self.order_size - \
+                      last_buy_order.price * self.order_size - \
+                      last_sell_order.price * self.order_size * 0.001 - \
+                      last_buy_order.price * self.order_size * 0.001
 
 
     def correction_orders(self):
@@ -68,8 +69,6 @@ class Bot:
             self.margin_calculate()
             self.del_order(OrderDir.sell)
             self.del_order(OrderDir.buy)
-            # self.margin_calculate()
-            # обновляем состояние и выставляем новый ордер на прожажу
             self.add_order(OrderDir.sell)
 
 
@@ -92,6 +91,13 @@ class Bot:
             self.add_order(OrderDir.sell)
 
 
+    def calc_max_depth(self):
+        sell_order = self.orders[OrderDir.sell]
+        if sell_order is not None:
+            # print(len(last_sell_order))
+            self.max_depth = len(sell_order) if len(sell_order) > self.max_depth else self.max_depth
+
+
     def updating(self, price=None):
         try:
             self.last_price = float(self.price.get_last_price((self.tiker))) if price is None else float(price)
@@ -106,30 +112,16 @@ class Bot:
         elif last_sell_order.status == OrderStates.create and last_buy_order is None:
             self.replace_order()
         elif last_sell_order.status == OrderStates.filled:
-            # ставим новый ласт ордер
-            # ставим новый шорт ордер
             self.add_order(OrderDir.sell)
             self.add_order(OrderDir.buy)
+            self.calc_max_depth()
         else:
             self.correction_orders()
 
 
-        # elif last_buy_order is not None \
-        #         and last_buy_order != [] \
-        #         and last_buy_order.status == OrderStates.filled:
-        #     # удаляем два ордера в продажу и сведенный в покупку
-        #     self.del_order(OrderDir.sell)
-        #     self.del_order(OrderDir.sell)
-        #     self.del_order(OrderDir.buy)
-        #     # обновляем состояние и выставляем новый ордер на прожажу
-        #     self.add_order(OrderDir.sell)
+    def __repr__(self):
+        return 'spread: {}, step: {}, margin: {}, depth: {}'.format(self.spread, self.step, int(self.margin), self.max_depth)
 
-
-
-
-    # for i in range(10):
-    #     a.updating(random.randint(7000, 8000))
-    #     print(a.orders[OrderDir.sell], a.orders[OrderDir.buy])
 
 
 

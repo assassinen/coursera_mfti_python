@@ -12,7 +12,7 @@ class Ticker:
         self.key = config['ticker']['responce_key'].split(',\n')
 
 
-    def get_tiker(self, symbol='tBTCUSD'):
+    def get_tiker(self, symbol):
         result = []
         try:
             response = requests.get(self.url.format(','.join(symbol)))

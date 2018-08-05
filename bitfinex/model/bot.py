@@ -5,7 +5,7 @@ from bitfinex.states.states import OrderDir
 
 class Bot:
 
-    def __init__(self, tiker, spread, step, depth, order_size):
+    def __init__(self, tiker, spread, step, depth, order_size, min_price):
         self.tiker = tiker
         self.spread = spread
         self.step = step
@@ -14,6 +14,7 @@ class Bot:
         self.price = Ticker()
         self.margin = 0
         self.max_depth = 0
+        self.min_price = min_price
 
         self.orders = {}
         self.orders[OrderDir.sell] = []
@@ -94,8 +95,13 @@ class Bot:
     def calc_max_depth(self):
         sell_order = self.orders[OrderDir.sell]
         if sell_order is not None:
-            # print(len(last_sell_order))
             self.max_depth = len(sell_order) if len(sell_order) > self.max_depth else self.max_depth
+
+
+    def is_lock_min_price(self):
+        last_sell_order = self.get_last_order(OrderDir.sell)
+        price = last_sell_order.price - self.spread if last_sell_order else self.get_price(OrderDir.sell)
+        return price < self.min_price
 
 
     def updating(self, price=None):
@@ -107,7 +113,9 @@ class Bot:
         last_sell_order = self.get_last_order(OrderDir.sell)
         last_buy_order = self.get_last_order(OrderDir.buy)
 
-        if last_sell_order is None:
+        if self.is_lock_min_price():
+            return
+        elif last_sell_order is None:
             self.add_order(OrderDir.sell)
         elif last_sell_order.status == OrderStates.create and last_buy_order is None:
             self.replace_order()

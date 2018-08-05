@@ -1,18 +1,14 @@
 from bitfinex.model.bot import Bot
-from bitfinex.states.states import OrderStates
-from bitfinex.states.states import OrderDir
 from bitfinex.api.data import Ticker, Candles
-import random
-import time
-import requests
+from bitfinex.states.states import OrderDir
 
 
-if __name__ == "__main__":
-    tiker = 'tBTCUSD'
+def find_bot_params():
+    symbol = 'tBTCUSD'
     bot_list = []
     for spread in range (100, 105, 5):
         for step in range (100, 105, 10):
-            bot_list.append(Bot(tiker=tiker, spread=spread, step=step, depth=10, order_size=0.005))
+            bot_list.append(Bot(tiker=symbol, spread=spread, step=step, depth=10, order_size=0.005, min_price=7000))
 
     time_frame = '15m'
     start = '2018-07-03 00:00:00'
@@ -35,35 +31,19 @@ if __name__ == "__main__":
         print(bot)
 
 
+def get_current_price():
+    symbol = 'tBTCUSD'
+    a = Bot(tiker=symbol, spread=100, step=100, depth=10, order_size=0.005, min_price=7000)
+    tiker = Ticker()
+
+    # i = tiker.get_last_price()
+    for i in (7000, 6900, 6800, 6700, 6600):
+        a.updating(i)
+        print(a.orders[OrderDir.sell], a.orders[OrderDir.buy])
 
 
-    # for price in (7400, 7500, 7600, 7050):
-    #     print(price)
-    #     a.updating(price)
-    #     print(a.orders[OrderDir.sell], a.orders[OrderDir.buy])
-    #     time.sleep(5)
-    # print(a.marge)
-    # last_price = Ticker()
-    # while True:
-    #     price = last_price.get_last_price(tiker)
-    #     print(price)
-    #     a.updating(price)
-    #     print(a.orders[OrderDir.sell], a.orders[OrderDir.buy])
-    #     time.sleep(10)
+if __name__ == "__main__":
+    get_current_price()
 
-    # time_frame = '5m'
-    # start = '2018-08-03 00:00:00'
-    # end = '2018-08-03 23:59:00'
-    # candels = Candles()
-    # for candle in candels.get_candles(time_frame=time_frame, start=start, end=end):
-    #     if 'HIGH' in candle and 'LOW' in candle:
-    #         # print(candels.unix_time_to_time(candle['MTS'] / 1000))
-    #         # print(candle['HIGH'], candels.unix_time_to_time(candle['MTS'] / 1000))
-    #         a.updating(candle['HIGH'])
-    #         # print(a.orders[OrderDir.sell], a.orders[OrderDir.buy])
-    #         # time.sleep(2)
-    #         # print(candle['LOW'], candels.unix_time_to_time(candle['MTS'] / 1000))
-    #         a.updating(candle['LOW'])
-    #         # print(a.orders[OrderDir.sell], a.orders[OrderDir.buy])
-    #         # time.sleep(2)
-    # print(a.marge)
+
+

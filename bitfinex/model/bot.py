@@ -5,7 +5,7 @@ from bitfinex.states.states import OrderDir
 
 class Bot:
 
-    def __init__(self, tiker, spread, step, depth, order_size, min_price):
+    def __init__(self, tiker, spread, step, depth, order_size, min_price=0):
         self.tiker = tiker
         self.spread = spread
         self.step = step
@@ -58,9 +58,9 @@ class Bot:
         last_buy_order = self.get_last_order(OrderDir.buy)
         self.margin = self.margin + \
                       last_sell_order.price * self.order_size - \
-                      last_buy_order.price * self.order_size - \
-                      last_sell_order.price * self.order_size * 0.001 - \
-                      last_buy_order.price * self.order_size * 0.001
+                      last_buy_order.price * self.order_size #- \
+                      # last_sell_order.price * self.order_size * 0.001 - \
+                      # last_buy_order.price * self.order_size * 0.001
 
 
     def correction_orders(self):
@@ -128,7 +128,7 @@ class Bot:
 
 
     def __repr__(self):
-        return 'spread: {}, step: {}, margin: {}, depth: {}'.format(self.spread, self.step, int(self.margin), self.max_depth)
+        return 'spread: {}, step: {}, margin: {}, depth: {}'.format(self.spread, self.step, self.margin, self.max_depth)
 
 
 

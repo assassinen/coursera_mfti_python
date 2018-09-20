@@ -8,8 +8,11 @@ class Order:
         self.side = side
         self.price = price
         self.size = size
-        self.status = 'Pending'
+        self.status = 'Arrived'
+
+    def change_order_size(self, size):
+        self.size = size
 
     def __repr__(self):
-        return f'({self.custom_id}, {self.symbol}, {self.price}, {self.size}, {self.status})'
+        return f'({self.custom_id}, {self.status}, {self.symbol}, {self.side}, {self.price}, {self.size})'
 

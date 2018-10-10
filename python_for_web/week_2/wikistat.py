@@ -65,22 +65,35 @@ def parse(start, end, path):
         # for item in soup.contents:
         #     print(type(item), item)
 
-        # print(body.h2)
-        # print(soup.h2.contents[0])
-        # print(soup.h3)
-        # print(soup.h4)
-        # print(soup.h5)
-        # print(soup.h6)
-        # for i in soup.li.find_next_siblings():
-        #     print(type(i))
-        n = 0
-        for i in soup.find_all('li'):
-            print()
-            print(i)
-            print(i.parent())
+        link = body.a
+        linkslen = 1
+        while link:
+            current_len = 1
+            links = link.find_next_siblings()
+            for i in links:
+                if i.name != 'a':
+                    break
+                else:
+                    current_len += 1
+            if current_len > linkslen:
+                linkslen = current_len
+            link = link.find_next('a')
 
 
-        print(n)
+
+        print(linkslen)
+
+            # links = link.find_next_siblings()
+            # for link in links:
+            #     if link.name == 'a':
+            #         pass
+
+
+            # print(first_link.find_next_siblings('a'))
+            # print(a.find_next_siblings())
+
+
+        # print(n)
 
         # for img in imgs:
         #     print(img.get('width'))

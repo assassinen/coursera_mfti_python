@@ -30,6 +30,7 @@ def build_bridge(start, end, path):
             DG.add_edge(start_point, end_point, weight=weight)
             weight += 1
     bridge = nx.shortest_path(DG, start, end)
+    bridge = ['Stone_Age']
     return bridge
 
 
@@ -46,10 +47,45 @@ def parse(start, end, path):
     # Когда есть список страниц, из них нужно вытащить данные и вернуть их
     out = {}
     for file in bridge:
+        print("{}{}".format(path, file))
         with open("{}{}".format(path, file)) as data:
             soup = BeautifulSoup(data, "lxml")
 
         body = soup.find(id="bodyContent")
+
+        # print(body)
+        imgs = sum(1 for img in body('img') if int(img.get('width')) >= 200)
+        print(imgs)
+        # headers = body
+        # for i in body:
+        #     print(i.string)
+        # print(soup.h1)
+        # print(soup.h1.renderContents())
+
+        # for item in soup.contents:
+        #     print(type(item), item)
+
+        # print(body.h2)
+        # print(soup.h2.contents[0])
+        # print(soup.h3)
+        # print(soup.h4)
+        # print(soup.h5)
+        # print(soup.h6)
+        # for i in soup.li.find_next_siblings():
+        #     print(type(i))
+        n = 0
+        for i in soup.find_all('li'):
+            print()
+            print(i)
+            print(i.parent())
+
+
+        print(n)
+
+        # for img in imgs:
+        #     print(img.get('width'))
+
+
 
         # TODO посчитать реальные значения
         imgs = 5  # Количество картинок (img) с шириной (width) не меньше 200

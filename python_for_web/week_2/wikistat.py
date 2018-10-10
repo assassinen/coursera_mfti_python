@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import networkx as nx
 import re
 import os
 
@@ -14,18 +15,21 @@ def build_tree(start, end, path):
             for i in re.findall(link_re, data.read()):
                 if i in files and i != file:
                     files[file].add(i)
-    for k, w in files.items():
-        if k == 'Stone_Age':
-            for i in w:
-                print(i)
     return files
 
 
 # Вспомогательная функция, её наличие не обязательно и не будет проверяться
 def build_bridge(start, end, path):
     files = build_tree(start, end, path)
-    bridge = []
+    # bridge = []
     # TODO Добавить нужные страницы в bridge
+    DG = nx.DiGraph()
+    for start_point, end_points in files.items():
+        weight = 1
+        for end_point in end_points:
+            DG.add_edge(start_point, end_point, weight=weight)
+            weight += 1
+    bridge = nx.shortest_path(DG, start, end)
     return bridge
 
 

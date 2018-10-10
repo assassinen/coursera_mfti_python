@@ -29,5 +29,5 @@ path = './wiki/'
 # else:
 #     print("{}% passed".format(count*100//max_count))
 
-build_tree(start, end, path).items()
+print(build_bridge(start, end, path))
 

@@ -12,7 +12,8 @@ def csv_writer(data, path):
     Write data to a CSV file path
     """
     with open(path, "w", newline='') as csv_file:
-        writer = csv.writer(csv_file, delimiter=';')
+        writer = csv.writer(csv_file, delimiter=';',
+                            quotechar='"', quoting=csv.QUOTE_ALL)
         for line in data:
             writer.writerow(line)
 
@@ -24,6 +25,7 @@ if __name__ == "__main__":
             "Dedric,Medhurst,Stiedemannberg".split(",")
             ]
     # 1) записываем в файл output.csv содержимой словаря data
+    print(data)
     out_file = "output.csv"
     csv_writer(data, out_file)
 

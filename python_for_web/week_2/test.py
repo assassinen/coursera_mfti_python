@@ -31,3 +31,4 @@ path = './wiki/'
 
 print(build_bridge(start, end, path))
 
+parse(start, end, path)

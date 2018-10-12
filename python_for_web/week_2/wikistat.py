@@ -53,7 +53,6 @@ def parse(start, end, path):
 
         body = soup.find(id="bodyContent")
 
-        # print(body)
         imgs = sum(1 for img in body('img') if int(img.get('width')) >= 200)
         print(imgs)
         # headers = body
@@ -78,10 +77,12 @@ def parse(start, end, path):
             if current_len > linkslen:
                 linkslen = current_len
             link = link.find_next('a')
-
-
-
         print(linkslen)
+
+
+        # links = [paragraph.find_all('a') for paragraph in body.find_all('p')]
+        # for i in links:
+        #     print(i)
 
             # links = link.find_next_siblings()
             # for link in links:

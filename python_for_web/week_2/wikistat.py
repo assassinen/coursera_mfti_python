@@ -58,9 +58,21 @@ def parse(start, end, path):
         # headers = body
         # for i in body:
         #     print(i.string)
-        # print(soup.h1)
-        # print(soup.h1.renderContents())
+        if body.findAll('h1'):
+            print(body.findAll('h1'))
+        if body.findAll('h2'):
+            for i in body.findAll('h2'):
+                print(i.contents)
 
+        # link = body.h2
+        # while link:
+        #     if link.name.startswith('h'):
+        #         print(link.name)
+        #
+        #         print(link.contents)
+        #
+        #         # print(link.__dict__)
+        #     link = link.find_next()
         # for item in soup.contents:
         #     print(type(item), item)
 

@@ -10,7 +10,7 @@ class AbstractEffect(Hero, ABC):
         self.base.get_stats
 
     def get_positive_effects(self):
-        self.base.get_negative_effects
+        self.base.get_positive_effects
 
     def get_negative_effects(self):
         self.base.get_negative_effects

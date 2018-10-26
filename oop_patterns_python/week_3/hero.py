@@ -17,6 +17,14 @@ class Hero:
             "Luck": 1
         }
 
+    # "Сила": 15,
+    # "Восприятие": 4,
+    # "Выносливость": 8,
+    # "Харизма": 2,
+    # "Интеллект": 3,
+    # "ловкость": 8,
+    # "Удача": 1
+
     def get_positive_effects(self):
         return self.positive_effects.copy()
 

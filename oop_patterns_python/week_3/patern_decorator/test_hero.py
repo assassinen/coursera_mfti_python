@@ -1,5 +1,5 @@
-from oop_patterns_python.week_3.hero_effects import *
-from oop_patterns_python.week_3.hero import Hero
+from oop_patterns_python.week_3.patern_decorator.hero_effects import *
+from oop_patterns_python.week_3.patern_decorator.hero import Hero
 
 
 test_hero = Hero()

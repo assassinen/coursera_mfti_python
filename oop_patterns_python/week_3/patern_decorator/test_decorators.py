@@ -1,6 +1,6 @@
 import unittest
-import oop_patterns_python.week_3.hero as hero
-import oop_patterns_python.week_3.hero_effects as main
+import oop_patterns_python.week_3.patern_decorator.hero as hero
+import oop_patterns_python.week_3.patern_decorator.hero_effects as main
 
 
 class TestBaff(unittest.TestCase):

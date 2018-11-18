@@ -36,8 +36,11 @@ def vec(x, y):  # создание вектора по началу (x) и ко�
 def draw_points(points, style="points", width=3, color=(255, 255, 255)):
     if style == "line":
         for p_n in range(-1, len(points) - 1):
-            pygame.draw.line(gameDisplay, color, (int(points[p_n][0]), int(points[p_n][1])),
-                             (int(points[p_n + 1][0]), int(points[p_n + 1][1])), width)
+            # print(points[p_n][0], points[p_n][1])
+            pygame.draw.line(gameDisplay, color,
+                             (int(points[p_n][0]), int(points[p_n][1])),
+                             (int(points[p_n + 1][0]),
+                              int(points[p_n + 1][1])), width)
 
     elif style == "points":
         for p in points:
@@ -71,10 +74,15 @@ def get_knot(points, count):
     for i in range(-2, len(points) - 2):
         ptn = []
         ptn.append(mul(add(points[i], points[i + 1]), 0.5))
+        print(ptn)
         ptn.append(points[i + 1])
+        print(ptn)
         ptn.append(mul(add(points[i + 1], points[i + 2]), 0.5))
+        print(ptn)
 
         res.extend(get_points(ptn, count))
+        print(ptn)
+        print(res)
     return res
 
 
@@ -118,8 +126,10 @@ if __name__ == "__main__":
     gameDisplay = pygame.display.set_mode(SCREEN_DIM)
     pygame.display.set_caption("MyScreenSaver")
 
-    steps = 35
+    steps = 2
     working = True
+    x = []
+
     points = []
     speeds = []
     show_help = False
@@ -149,7 +159,8 @@ if __name__ == "__main__":
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 points.append(event.pos)
-                speeds.append((random.random() * 2, random.random() * 2))
+                # speeds.append((random.random() * 2, random.random() * 2))
+                speeds.append((1, 1))
 
         gameDisplay.fill((0, 0, 0))
         hue = (hue + 1) % 360

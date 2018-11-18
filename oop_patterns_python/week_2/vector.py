@@ -22,11 +22,11 @@ class Vec2d:
 
 def main():
     v1 = Vec2d((1,1))
-    v2 = Vec2d((1,2))
-    print(v1 + v2)
-    print(v1 - v2)
-    print(v2 - v1)
-    print(v2 * 5)
+    v2 = Vec2d((50,20))
+    # print(v1 + v2)
+    # print(v1 - v2)
+    # print(v2 - v1)
+    print(type(v2 * 0.5))
     print(len(v1))
 
 

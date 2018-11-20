@@ -30,7 +30,7 @@ class Polyline():
     def __init__(self):
         self.points = []
         self.speeds = []
-        self.steps = 2
+        self.steps = 35
 
     def draw_points(self, style="points", width=3, color=(255, 255, 255), points=None):
         if points is None:

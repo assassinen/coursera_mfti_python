@@ -1,4 +1,6 @@
 import json
+import vk
+
 import os
 
 

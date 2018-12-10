@@ -1,4 +1,5 @@
 import random
+import math
 
 def task_1():
     m, n = 5, 4
@@ -18,8 +19,7 @@ def task_1():
 
 
 
-def get_diagonal(q, up=False, reverse=False):
-    n = 8
+def get_diagonal(q, n, up=False, reverse=False):
     count = [i for i in range(1, n+1)]
     start = 0
     diagonal_list = []
@@ -40,23 +40,26 @@ def get_diagonal(q, up=False, reverse=False):
     return diagonal_list
 
 def task_2():
-    global matrix
-    m, n = 8, 8
+
+    m, n = 5, 5
     matrix = [
         [random.randrange(10) for y in range(m)]
         for x in range(n)
     ]
 
-    # q = [i for i in range(1, 65)]
-    q = [random.randrange(10, 99) for y in range(64)]
 
-    diagonals = get_diagonal(q)
+    q = [i for i in range(1, m*n+1)]
+    # q = [random.randrange(10, 99) for y in range(64)]
+    q_n = sum([i for i in range(1, m+1)])
+    print(q_n)
+
+    diagonals = get_diagonal(q, n=n)
     for diagonal in diagonals:
         for k, w in diagonal.items():
             matrix[k[0]][k[1]]=w
 
-    q1 = list(reversed(q[36:]))
-    diagonals = reversed(get_diagonal(q1, up=True))
+    q1 = list(reversed(q[q_n:]))
+    diagonals = reversed(get_diagonal(q1, n=n, up=True))
     for diagonal in diagonals:
         for k, w in diagonal.items():
             matrix[k[0]][k[1]]=w
@@ -70,11 +73,42 @@ def task_2():
         print(i)
 
 
+def task_3():
+    m, n = 3, 3
+    matrix = [
+        [random.randrange(9) for y in range(m)]
+        for x in range(n)
+    ]
+    i = 1
+    for k in range(n):
+        x = k
+        y = 0
+        while x >= 0:
+            matrix[x][y] = i
+            i += 1
+            x -= 1
+            y += 1
+
+    for k in range(1, n):
+        x = n-1
+        y = k
+        while y < n:
+            matrix[x][y] = i
+            i += 1
+            x -= 1
+            y += 1
+
+
+    for i in matrix:
+        print(i)
+
 
 
 if __name__ == "__main__":
-    print('Задача #1')
-    task_1()
-    print()
+    # print('Задача #1')
+    # task_1()
+    # print()
     print('Задача #2')
     task_2()
+    print()
+    task_3()

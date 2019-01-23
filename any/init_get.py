@@ -1,19 +1,11 @@
 params = '''
-  user_login 
-  hashed_password 
-  email
-  phone
-  user_type
-  nationality 
-  first_name 
-  middle_name
-  last_name 
-  date_of_birth
-  place_of_birth 
-  registration_addr_id
-  residential_addr_id
-  active 
-  created_at
+    identity_document_id
+    file_path
+    file_type
+    status
+    created_at
+    updated_status_at
+    document_expire_date
   '''
 
 

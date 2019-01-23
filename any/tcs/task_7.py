@@ -19,7 +19,7 @@ def supplement(str, n):
         str = '0' + str
     return str
 
-nn = 6
+nn = 5
 n = nn + 1
 b = range(2 ** (n) - 1)
 
@@ -38,23 +38,49 @@ results = []
 plus_value = 3
 mult_value = 4
 
-for actions in actions_list:
-    for start in range(101):
+# for actions in actions_list:
+#     for start in range(3):
+#         x = start
+#         for action in actions:
+#             print(x)
+#             if x > 100:
+#                 break
+#             if action == '0':
+#                 x += plus_value
+#             else:
+#                 x *= mult_value
+#             sss = '{}_{}_{}'.format(start, x, actions)
+#         results.append(sss)
+
+for start in range(3):
+    for actions in actions_list:
         x = start
         for action in actions:
             if x > 100:
+                # if
+                x = start
                 break
+
             if action == '0':
                 x += plus_value
-            else:
+            elif action == '1':
                 x *= mult_value
+
         sss = '{}_{}_{}'.format(start, x, actions)
         results.append(sss)
+
+
+
+
 
 x = 10
 y = 19
 
-x, y = input().split(' ')
+# x, y = input().split(' ')
+results = sorted(results, key=lambda x: (int(x.split('_')[0]), int(x.split('_')[1])))
+for i in results:
+    # if i.startswith('0'):
+    print(i)
 results = list(filter(lambda z: z.split('_')[0] == str(x) and z.split('_')[1] == str(y), results))
 print(results)
 results = list(map(lambda z: len(z.split('_')[2]), results))
@@ -63,3 +89,5 @@ if len(results) > 0:
     print(min(results))
 else:
     print('-1')
+
+

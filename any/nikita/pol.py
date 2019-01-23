@@ -25,7 +25,8 @@
 
 # a = ''.join((input().lower()).split())
 # print(a)
-a = '''
+
+test = '''
 Господа!
 Я
 собрал
@@ -37,36 +38,12 @@ a = '''
 пренеприятнейшее
 известие...'''
 
-# b = set(a.lower().split())
-# print([i for i in a.lower().strip().split()])
-# print(type(a.lower().strip('\n')))
-# c = []
-# # for i in a:
-# #     print(i)
-# answer = []
-# for i in b:
-#     c.append(a.count(i))
-# for i in b:
-#     if a.count(i) == max(c):
-#         answer.append(i)
-# print(' '.join(sorted(answer)))
-
-
-# Господа! Я собрал вас здесь, чтобы сообщить вам пренеприятнейшее известие...
-# Господа!
-# Я
-# собрал
-# вас
-# здесь,
-# чтобы
-# сообщить
-# вам
-# пренеприятнейшее
-# известие...
-
-a = input().lower()
+a = input().lower() or test
 b = set(a)
-b.remove(' ')
+for i in [' ', '\n']:
+    if i in b:
+        b.remove(i)
+
 
 c = []
 answer = []
@@ -76,3 +53,8 @@ for i in b:
     if a.count(i) == max(c):
         answer.append(i)
 print(' '.join(sorted(answer)))
+
+a = [6, 2, 5, 4, 3, 6, 6]
+
+import statistics
+print(statistics.mode(a))

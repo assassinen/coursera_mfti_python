@@ -15,6 +15,14 @@ class AbstractLevel(yaml.YAMLObject):
     def get_objects(cls):
         return cls.Objects()
 
+    @classmethod
+    def from_yaml(cls, loader, node):
+        level_map = cls.get_map()
+        level_objects = cls.get_objects()
+        level_objects.config = loader.construct_mapping(node)
+
+        return {"map": level_map, "obj": level_objects}
+
     class Map(ABC):
         pass
 
@@ -23,6 +31,8 @@ class AbstractLevel(yaml.YAMLObject):
 
 
 class EasyLevel(AbstractLevel):
+    yaml_tag = "!easy_level"
+
     class Map:
         def __init__(self):
             self.Map = [[0 for _ in range(5)] for _ in range(5)]
@@ -58,6 +68,8 @@ class EasyLevel(AbstractLevel):
 
 
 class MediumLevel(AbstractLevel):
+    yaml_tag = "!medium_level"
+
     class Map:
         def __init__(self):
             self.Map = [[0 for _ in range(8)] for _ in range(8)]
@@ -93,6 +105,8 @@ class MediumLevel(AbstractLevel):
 
 
 class HardLevel(AbstractLevel):
+    yaml_tag = "!hard_level"
+
     class Map:
         def __init__(self):
             self.Map = [[0 for _ in range(10)] for _ in range(10)]
@@ -130,36 +144,3 @@ class HardLevel(AbstractLevel):
                     self.objects.append((obj_name, coord))
 
             return self.objects
-
-
-Levels = {'levels':[]}
-_map = EasyLevel.Map()
-_obj = EasyLevel.Objects()
-Levels['levels'].append({'map': _map, 'obj': _obj})
-map_0 = Levels['levels'][-1]['map'].get_map()
-obj_0 = Levels['levels'][-1]['obj'].get_objects(map_0)
-
-_map = MediumLevel.Map()
-_obj = MediumLevel.Objects()
-_obj.config = {'enemy':['rat']}
-Levels['levels'].append({'map': _map, 'obj': _obj})
-map_1 = Levels['levels'][-1]['map'].get_map()
-obj_1 = Levels['levels'][-1]['obj'].get_objects(map_1)
-
-
-_map = HardLevel.Map()
-_obj = HardLevel.Objects()
-_obj.config = {'enemy': ['rat', 'snake', 'dragon'], 'enemy_count': 10}
-Levels['levels'].append({'map': _map, 'obj': _obj})
-map_2 = Levels['levels'][-1]['map'].get_map()
-obj_2 = Levels['levels'][-1]['obj'].get_objects(map_2)
-
-
-print(map_0)
-print(obj_0)
-print()
-print(map_1)
-print(obj_1)
-print()
-print(map_2)
-print(obj_2)

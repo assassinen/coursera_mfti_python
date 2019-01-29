@@ -52,7 +52,7 @@ mult_value = 4
 #             sss = '{}_{}_{}'.format(start, x, actions)
 #         results.append(sss)
 
-for start in range(3):
+for start in range(101):
     for actions in actions_list:
         x = start
         for action in actions:
@@ -73,13 +73,13 @@ for start in range(3):
 
 
 x = 10
-y = 19
+y = 46
 
 # x, y = input().split(' ')
-results = sorted(results, key=lambda x: (int(x.split('_')[0]), int(x.split('_')[1])))
-for i in results:
-    # if i.startswith('0'):
-    print(i)
+# results = sorted(results, key=lambda x: (int(x.split('_')[0]), int(x.split('_')[1])))
+# for i in results:
+#     # if i.startswith('0'):
+#     print(i)
 results = list(filter(lambda z: z.split('_')[0] == str(x) and z.split('_')[1] == str(y), results))
 print(results)
 results = list(map(lambda z: len(z.split('_')[2]), results))
@@ -90,3 +90,29 @@ else:
     print('-1')
 
 
+print('-------------')
+
+
+x = 10
+y = 1000
+counter = -1
+max_counter = (y - x)//plus_value + 1
+
+n = 1
+
+for i in range(2, 2 ** (max_counter+1) - 1):
+    _x_ = x
+    n += 1
+    for j in str(bin(i)[3:]):
+        if j == '1':
+            _x_ *= 4
+        elif j == '0':
+            _x_ += 3
+        else:
+            print(j, end=' ')
+    if _x_== y:
+        print(str(bin(i)[3:]))
+        counter = len(str(bin(i)[3:]))
+        break
+
+print(counter, n)

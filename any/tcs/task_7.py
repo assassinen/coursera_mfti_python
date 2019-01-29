@@ -57,17 +57,16 @@ for start in range(3):
         x = start
         for action in actions:
             if x > 100:
-                # if
                 x = start
                 break
-
             if action == '0':
                 x += plus_value
             elif action == '1':
                 x *= mult_value
 
-        sss = '{}_{}_{}'.format(start, x, actions)
-        results.append(sss)
+        if x != start:
+            sss = '{}_{}_{}'.format(start, x, actions)
+            results.append(sss)
 
 
 

@@ -25,7 +25,6 @@ import pygame
 import random
 import math
 
-SCREEN_DIM = (800, 600)
 
 class Vec2d:
     def __init__(self, pos):
@@ -33,13 +32,19 @@ class Vec2d:
         self.y = pos[1]
 
     def __add__(self, v):
-        return v.x + self.x, v.y + self.y
+        pos = v.x + self.x, v.y + self.y
+        return Vec2d(pos)
 
     def __sub__(self, v):
-        return self.x - v.x, self.y - v.y
+        self.x - v.x, self.y - v.y
+        return Vec2d(pos)
 
     def __mul__(self, k):
-        return self.x * k, self.y * k
+        if isinstance(k, Vec2d):
+            pos = self.x * k.x, self.y * k.y
+        else:
+            pos = self.x * k, self.y * k
+        return Vec2d(pos)
 
     def __len__(self):
         return int(math.sqrt(self.x * self.x + self.y * self.y))
@@ -47,13 +52,19 @@ class Vec2d:
     def __repr__(self):
         return f'x: {self.x}, y: {self.y}'
 
+    def int_pair(self, k):
+        pass
 
 
 class Polyline():
+    steps = 35
+    SCREEN_DIM = (800, 600)
+    speed = 1
+
     def __init__(self):
         self.points = []
         self.speeds = []
-        self.steps = 35
+
 
     def draw_points(self, style="points", width=3, color=(255, 255, 255), points=None):
         if points is None:
@@ -76,9 +87,9 @@ class Knot(Polyline):
         res = []
         for i in range(-2, len(self.points) - 2):
             ptn = []
-            ptn.append(Vec2d(Vec2d(self.points[i] + self.points[i + 1]) * 0.5))
+            ptn.append((self.points[i] + self.points[i + 1]) * 0.5)
             ptn.append(self.points[i + 1])
-            ptn.append(Vec2d(Vec2d(self.points[i + 1] + self.points[i + 2]) * 0.5))
+            ptn.append((self.points[i + 1] + self.points[i + 2]) * 0.5)
 
             res.extend(self.get_points(ptn))
 
@@ -96,22 +107,30 @@ class Knot(Polyline):
             deg = len(points) - 1
         if deg == 0:
             return points[0]
-        return Vec2d(Vec2d(points[deg] * alpha) +
-                     Vec2d(self.get_point(points, alpha, deg - 1) * (1 - alpha)))
+        return points[deg] * alpha + self.get_point(points, alpha, deg - 1) * (1 - alpha)
 
     def add_point(self, point, speed):
         self.points.append(point)
         self.speeds.append(speed)
         self.get_knot()
 
+    def del_last_point(self):
+        if len(self.points) > 0:
+            self.points.pop()
+        self.get_knot()
+
+    def change_speed(self, speed):
+        for i, sp in enumerate(self.speeds):
+            self.speeds[i] = sp * speed
+
     def set_points(self):
         for p in range(len(self.points)):
-            self.points[p] = points[p] + speeds[p]
-            if self.points[p].x > SCREEN_DIM[0] or self.points[p].x < 0:
-                self.speeds[p] = (- self.speeds[p].x, self.speeds[p].y)
+            self.points[p] = self.points[p] + self.speeds[p]
+            if self.points[p].x > self.SCREEN_DIM[0] or self.points[p].x < 0:
+                self.speeds[p] = Vec2d((- self.speeds[p].x, self.speeds[p].y))
 
-            if self.points[p].y > SCREEN_DIM[1] or self.points[p].y < 0:
-                self.speeds[p] = (self.speeds[p].x, -self.speeds[p].y)
+            if self.points[p].y > self.SCREEN_DIM[1] or self.points[p].y < 0:
+                self.speeds[p] = Vec2d((self.speeds[p].x, -self.speeds[p].y))
         self.get_knot()
 
 
@@ -126,6 +145,7 @@ def draw_help():
     data.append(["F1", "Show Help"])
     data.append(["R", "Restart"])
     data.append(["P", "Pause/Play"])
+    data.append(["D", "Delete last point"])
     data.append(["Num+", "More points"])
     data.append(["Num-", "Less points"])
     data.append(["", ""])
@@ -143,11 +163,15 @@ def draw_help():
 
 # Основная программа
 if __name__ == "__main__":
+    steps = Polyline.steps
+    SCREEN_DIM = Polyline.SCREEN_DIM
+    speed = Polyline.speed
+
     pygame.init()
     gameDisplay = pygame.display.set_mode(SCREEN_DIM)
     pygame.display.set_caption("MyScreenSaver")
 
-    steps = 35
+
     working = True
     show_help = False
     pause = True
@@ -155,7 +179,8 @@ if __name__ == "__main__":
     hue = 0
     color = pygame.Color(0)
 
-    points_ = Knot()
+    points = Knot()
+    speeds = Knot()
 
     while working:
         for event in pygame.event.get():
@@ -165,8 +190,8 @@ if __name__ == "__main__":
                 if event.key == pygame.K_ESCAPE:
                     working = False
                 if event.key == pygame.K_r:
-                    points = []
-                    speeds = []
+                    points = Knot()
+                    speeds = Knot()
                 if event.key == pygame.K_p:
                     pause = not pause
                 if event.key == pygame.K_KP_PLUS:
@@ -175,11 +200,21 @@ if __name__ == "__main__":
                     show_help = not show_help
                 if event.key == pygame.K_KP_MINUS:
                     steps -= 1 if steps > 1 else 0
+                if event.key == pygame.K_d:
+                    points.del_last_point()
+
+                if event.key == pygame.K_F6:
+                    speed *= 1.01
+                    points.change_speed(speed)
+                if event.key == pygame.K_F5:
+                    speed *= 0.99
+                    points.change_speed(speed)
+
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                points_.add_point(
+                points.add_point(
                     Vec2d(event.pos),
-                    Vec2d((random.random() * 2, random.random() * 2))
+                    Vec2d((random.random() * speed, random.random() * speed))
                 )
 
 
@@ -187,11 +222,11 @@ if __name__ == "__main__":
         hue = (hue + 1) % 360
         color.hsla = (hue, 100, 50, 100)
 
-        points_.draw_points()
-        points_.get_knot()
+        points.draw_points()
+        points.get_knot()
 
-        # if not pause:
-        #     points_.set_points()
+        if not pause:
+            points.set_points()
 
         if show_help:
             draw_help()

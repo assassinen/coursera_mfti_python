@@ -74,15 +74,15 @@ def get_knot(points, count):
     for i in range(-2, len(points) - 2):
         ptn = []
         ptn.append(mul(add(points[i], points[i + 1]), 0.5))
-        print(ptn)
+        # print(ptn)
         ptn.append(points[i + 1])
-        print(ptn)
+        # print(ptn)
         ptn.append(mul(add(points[i + 1], points[i + 2]), 0.5))
-        print(ptn)
+        # print(ptn)
 
         res.extend(get_points(ptn, count))
-        print(ptn)
-        print(res)
+        # print(ptn)
+        # print(res)
     return res
 
 
@@ -112,6 +112,8 @@ def draw_help():
 # Персчитывание координат опорных точек
 def set_points(points, speeds):
     for p in range(len(points)):
+        print(points[p], speeds[p])
+        print('----')
         points[p] = add(points[p], speeds[p])
         if points[p][0] > SCREEN_DIM[0] or points[p][0] < 0:
             speeds[p] = (- speeds[p][0], speeds[p][1])
@@ -159,8 +161,8 @@ if __name__ == "__main__":
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 points.append(event.pos)
-                # speeds.append((random.random() * 2, random.random() * 2))
-                speeds.append((1, 1))
+                speeds.append((random.random() * 2, random.random() * 2))
+                # speeds.append((1, 1))
 
         gameDisplay.fill((0, 0, 0))
         hue = (hue + 1) % 360

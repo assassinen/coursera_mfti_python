@@ -1,4 +1,4 @@
-from week_1.mypackage.utils import multiplay
+from .mypackage.utils import multiplay
 import inspect
 # import this
 import os
